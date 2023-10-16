@@ -65,7 +65,8 @@ public class Game {
         // create board here
         JFrame chessBoard = new JFrame();
         chessBoard.setBounds(10, 10, 512, 512);
-        Board.makeBoard();
+        //Board.makeBoard();
+        Board.setBoardFromFen(Board.startFEN);
         JPanel thing = new JPanel(){ // called "thing" because I don't know what it is
             @Override
             public void paint(Graphics g){

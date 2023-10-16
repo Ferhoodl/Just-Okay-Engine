@@ -13,7 +13,7 @@ public class Fen{
         pieceTypeSymbolPairing.put('r', Piece.Rook);
         pieceTypeSymbolPairing.put('q', Piece.Queen);
 
-        String fenBoard = fen.split(" ")[0]; // do I need this? I think it is to get rid of extra spaces in a string. Not sure.
+        String fenBoard = fen.split(" ")[0];
         int file = 0;
         int rank = 0;
 
@@ -21,6 +21,15 @@ public class Fen{
             char symbol = fenBoard.charAt(i);
             if (symbol == '/'){
                 file = 0;
+                rank --;
+            } else {
+                if (Character.isDigit(String.valueOf(symbol).charAt(0))){ // backup code for this: (symbol >= '0' && symbol <= '9')
+                    file += (int)symbol;
+                }else {
+                    int pieceColor = (Character.isUpperCase(symbol)) ? Piece.White : Piece.Black;
+                    int pieceType = pieceTypeFromSymbol[String.valueOf(symbol).toLowerCase()];
+                    String.valueOf(symbol).toLowerCase();
+                }
                 
             }
         }

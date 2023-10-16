@@ -10,5 +10,31 @@ public class Piece{
 
     public static final int White = 8;
     public static final int Black = 16;
+    public static int[] getPieceTypeFromFenSymbol;
+
+    public static int getPieceTypeFromFenSymbol(String fSymbol){
+        int returnedPiece = 0;
+        switch(fSymbol) {
+            case "k": // king
+                returnedPiece = King;
+                break;
+            case "p": // pawn
+                returnedPiece = Pawn;
+                break;
+            case "n": // knight
+                returnedPiece = Knight;
+                break;
+            case "b": // bishop
+                returnedPiece = Bishop;
+                break;
+            case "r": // rook
+                returnedPiece = Rook;
+                break;
+            case "q": // queen
+                returnedPiece = Queen;
+                break;
+        }
+        return returnedPiece;
+    }
 
 }
