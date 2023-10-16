@@ -16,16 +16,16 @@ public class Board {
         Squares[59] = Piece.Black | Piece.Queen;
         Squares[63] = Piece.Black | Piece.Rook;
 
+
+        Squares[8] = Piece.White | Piece.Pawn;
+        Squares[11] = Piece.White | Piece.Pawn;
+        Squares[15] = Piece.White | Piece.Pawn;
+
         Squares[0] = Piece.White | Piece.Rook;
         Squares[1] = Piece.White | Piece.Knight;
         Squares[4] = Piece.White | Piece.King;
         Squares[5] = Piece.White | Piece.Bishop;
         Squares[5] = Piece.White | Piece.Bishop;
-
-
-        Squares[8] = Piece.White | Piece.Pawn;
-        Squares[11] = Piece.White | Piece.Pawn;
-        Squares[15] = Piece.White | Piece.Pawn;
     }
 
     public static int getSquare(int square){
