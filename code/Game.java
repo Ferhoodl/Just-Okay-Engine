@@ -17,8 +17,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.FileFilter;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -36,6 +35,8 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 
+import java.util.*;
+
 
 
 
@@ -51,6 +52,7 @@ public class Game {
         //Draw pieces here
         BufferedImage imageReader = ImageIO.read(new File("assets/pieces.png"));
         Image pieceImageList[] = new Image[12];
+        
         
         int iter = 0;
         for (int y=0; y<400; y+=200){
@@ -112,13 +114,6 @@ public class Game {
                         pImg += 6;
                     }
                     if(pImg != -1){
-                        /*
-                        BufferedImage pieceImage = (BufferedImage) pieceImageList[pImg];
-                        JLabel label = new JLabel(new ImageIcon(pieceImage));
-                        label.setSize(64, 64);
-                        label.setLocation(((sq)%8)*64 , (((int)(sq)/8)*64));
-                        */
-                        
                         g.drawImage(pieceImageList[pImg], ((sq)%8)*64, ((int)(sq)/8)*64, this);
                         
                     }
@@ -126,15 +121,51 @@ public class Game {
             }
         };
         chessBoard.add(thing);
+        chessBoard.addMouseListener(new MouseListener(){
+            @Override
+            public void mouseEntered(MouseEvent arg0) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent arg0) {
+            }
+
+            @Override
+            public void mousePressed(MouseEvent arg0) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent arg0) {
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent arg0) {
+            }
+        });
+
+        chessBoard.addMouseMotionListener(new MouseMotionListener(){
+            @Override
+            public void mouseDragged(MouseEvent arg0) {
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent arg0) {
+            }
+        });
+
+
         chessBoard.setDefaultCloseOperation(3);
         chessBoard.setVisible(true);
         
-    
-        boolean running = true;
-        Board.makeBoard();
-
-
-
-        //[piece images] By Cburnett - Own work, CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid=1499801
     }
+    /*
+    public static int getPiece(int x, int y, Board bd){
+        int xPiece = x/64;
+        int yPiece = y/64;
+        //int piece = bd.getSquare(((int)yPiece/8)+(xPiece-1))
+        int piece;
+        piece = Board.getSquare(((int)yPiece/8)+(xPiece-1));
+        return piece;
+    }
+    */
 }
