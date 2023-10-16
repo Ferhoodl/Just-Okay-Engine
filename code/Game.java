@@ -12,7 +12,7 @@ import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-// for moving pieces
+// for moving pieces 
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -114,7 +114,7 @@ public class Game {
                         pImg += 6;
                     }
                     if(pImg != -1){
-                        g.drawImage(pieceImageList[pImg], ((sq)%8)*64, ((int)(sq)/8)*64, this);
+                        g.drawImage(pieceImageList[pImg], ((sq)%8)*64, (448-((int)(sq)/8)*64), this);
                         
                     }
                 }
