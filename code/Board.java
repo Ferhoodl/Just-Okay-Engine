@@ -3,40 +3,22 @@ import java.util.*;
 public class Board {
 
     private static int[] squares;
-    public final static String startFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    public static void makeBoard(){
+    public static final String startFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+
+    public Board(){
         squares = new int[64];
         Arrays.fill(squares, 0);
-
-        squares[48] = Piece.Black | Piece.Pawn;
-        squares[51] = Piece.Black | Piece.Pawn;
-        squares[55] = Piece.Black | Piece.Pawn;
-
-
-        squares[59] = Piece.Black | Piece.Queen;
-        squares[63] = Piece.Black | Piece.Rook;
-
-
-        squares[8] = Piece.White | Piece.Pawn;
-        squares[11] = Piece.White | Piece.Pawn;
-        squares[15] = Piece.White | Piece.Pawn;
-
-        squares[0] = Piece.White | Piece.Rook;
-        squares[1] = Piece.White | Piece.Knight;
-        squares[4] = Piece.White | Piece.King;
-        squares[5] = Piece.White | Piece.Bishop;
-        squares[5] = Piece.White | Piece.Bishop;
     }
 
-    public static int getSquare(int square){
+    public int getSquare(int square){
         return squares[square];
     }
 
-    public static int[] getSquares(){
+    public int[] getSquares(){
         return squares;
     }
 
-    public static void setBoardFromFen (String fen){
+    public void setBoardFromFen (String fen){
 
         squares = new int[64];
         Arrays.fill(squares, 0);

@@ -49,6 +49,8 @@ public class Game {
 
     public static void main(String[] args) throws IOException{
 
+        Board gameBoard = new Board();
+
         //Draw pieces here
         BufferedImage imageReader = ImageIO.read(new File("assets/pieces.png"));
         Image pieceImageList[] = new Image[12];
@@ -63,11 +65,11 @@ public class Game {
         }
 
         // create board here
-        JFrame chessBoard = new JFrame();
-        chessBoard.setBounds(10, 10, 512, 512);
+        JFrame chessUI = new JFrame();
+        chessUI.setBounds(10, 10, 512, 512);
         //Board.makeBoard();
-        Board.setBoardFromFen(Board.startFEN);
-        JPanel thing = new JPanel(){ // called "thing" because I don't know what it is
+        gameBoard.setBoardFromFen(Board.startFEN);
+        JPanel chessBoard = new JPanel(){ //The JPanel is our representaiton of the board, and is drawn to the
             @Override
             public void paint(Graphics g){
                 for(int y=0; y<8; y++){
@@ -82,7 +84,7 @@ public class Game {
                 }
                 for(int sq = 0; sq < 64; sq++){
                     int pImg = 0; // img from pieceImageList
-                    switch(Board.getSquare(sq)) {
+                    switch(gameBoard.getSquare(sq)) {
                         case 9: // king
                         case 17:
                             pImg = 0;
@@ -111,7 +113,7 @@ public class Game {
                             pImg = -1;
                             break;
                     }
-                    if (Board.getSquare(sq) > 16){
+                    if (gameBoard.getSquare(sq) > 16){
                         pImg += 6;
                     }
                     if(pImg != -1){
@@ -121,8 +123,8 @@ public class Game {
                 }
             }
         };
-        chessBoard.add(thing);
-        chessBoard.addMouseListener(new MouseListener(){
+        chessUI.add(chessBoard);
+        chessUI.addMouseListener(new MouseListener(){
             @Override
             public void mouseEntered(MouseEvent arg0) {
             }
@@ -144,7 +146,7 @@ public class Game {
             }
         });
 
-        chessBoard.addMouseMotionListener(new MouseMotionListener(){
+        chessUI.addMouseMotionListener(new MouseMotionListener(){
             @Override
             public void mouseDragged(MouseEvent arg0) {
             }
@@ -155,18 +157,16 @@ public class Game {
         });
 
 
-        chessBoard.setDefaultCloseOperation(3);
-        chessBoard.setVisible(true);
+        chessUI.setDefaultCloseOperation(3);
+        chessUI.setVisible(true);
         
     }
-    /*
+    
     public static int getPiece(int x, int y, Board bd){
         int xPiece = x/64;
         int yPiece = y/64;
-        //int piece = bd.getSquare(((int)yPiece/8)+(xPiece-1))
-        int piece;
-        piece = Board.getSquare(((int)yPiece/8)+(xPiece-1));
+        int piece = bd.getSquare(((int)yPiece/8)+(xPiece-1));
+        piece = bd.getSquare(((int)yPiece/8)+(xPiece-1));
         return piece;
     }
-    */
 }
