@@ -84,7 +84,7 @@ public class Game {
                 }
                 for(int sq = 0; sq < 64; sq++){
                     int pImg = 0; // img from pieceImageList
-                    switch(gameBoard.getSquare(sq)) {
+                    switch(gameBoard.getPieceOnSquare(sq)) {
                         case 9: // king
                         case 17:
                             pImg = 0;
@@ -113,7 +113,7 @@ public class Game {
                             pImg = -1;
                             break;
                     }
-                    if (gameBoard.getSquare(sq) > 16){
+                    if (gameBoard.getPieceOnSquare(sq) > 16){
                         pImg += 6;
                     }
                     if(pImg != -1){
@@ -126,33 +126,34 @@ public class Game {
         chessUI.add(chessBoard);
         chessUI.addMouseListener(new MouseListener(){
             @Override
-            public void mouseEntered(MouseEvent arg0) {
+            public void mouseEntered(MouseEvent mse) {
             }
 
             @Override
-            public void mouseExited(MouseEvent arg0) {
+            public void mouseExited(MouseEvent mse) {
             }
 
             @Override
-            public void mousePressed(MouseEvent arg0) {
+            public void mousePressed(MouseEvent mse) {
+                System.out.println(getPieceUnderMouse(mse.getX(), mse.getY(), gameBoard));
             }
 
             @Override
-            public void mouseReleased(MouseEvent arg0) {
+            public void mouseReleased(MouseEvent mse) {
             }
 
             @Override
-            public void mouseClicked(MouseEvent arg0) {
+            public void mouseClicked(MouseEvent mse) {
             }
         });
 
         chessUI.addMouseMotionListener(new MouseMotionListener(){
             @Override
-            public void mouseDragged(MouseEvent arg0) {
+            public void mouseDragged(MouseEvent mse) {
             }
 
             @Override
-            public void mouseMoved(MouseEvent arg0) {
+            public void mouseMoved(MouseEvent mse) {
             }
         });
 
@@ -162,11 +163,11 @@ public class Game {
         
     }
     
-    public static int getPiece(int x, int y, Board bd){
+    public static int getPieceUnderMouse(int x, int y, Board bd){
         int xPiece = x/64;
-        int yPiece = y/64;
-        int piece = bd.getSquare(((int)yPiece/8)+(xPiece-1));
-        piece = bd.getSquare(((int)yPiece/8)+(xPiece-1));
+        int yPiece = 7 - (y/64);
+        int temp = ((int)yPiece*8)+(xPiece);
+        int piece = bd.getPieceOnSquare(temp);
         return piece;
     }
 }

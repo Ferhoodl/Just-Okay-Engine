@@ -10,8 +10,9 @@ public class Board {
         Arrays.fill(squares, 0);
     }
 
-    public int getSquare(int square){
-        return squares[square];
+    public int getPieceOnSquare(int square){
+        int tempReturn = squares[square];
+        return tempReturn;
     }
 
     public int[] getSquares(){
