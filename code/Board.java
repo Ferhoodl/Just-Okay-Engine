@@ -15,6 +15,14 @@ public class Board {
         return tempReturn;
     }
 
+    public void setPieceOnSquare(int sq, int id){
+       squares[sq] = id;
+    }
+
+    public void removePiece(int sq){
+        squares[sq] = 0;
+    }
+
     public int[] getSquares(){
         return squares;
     }
@@ -55,5 +63,9 @@ public class Board {
             }
         }
     }
-
+    public void movePiece(int origSq, int newSq){
+        int pieceId = getPieceOnSquare(origSq);
+        removePiece(origSq);
+        setPieceOnSquare(newSq, pieceId);               
+    }
 }

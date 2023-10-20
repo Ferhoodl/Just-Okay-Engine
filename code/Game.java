@@ -55,7 +55,9 @@ public class Game {
         BufferedImage imageReader = ImageIO.read(new File("assets/pieces.png"));
         Image pieceImageList[] = new Image[12];
         
+        int heldPieceId;
         
+
         int iter = 0;
         for (int y=0; y<400; y+=200){
             for(int x=0; x<1200; x+=200){
@@ -83,44 +85,12 @@ public class Game {
                     }
                 }
                 for(int sq = 0; sq < 64; sq++){
-                    int pImg = 0; // img from pieceImageList
-                    switch(gameBoard.getPieceOnSquare(sq)) {
-                        case 9: // king
-                        case 17:
-                            pImg = 0;
-                            break;
-                        case 10: // pawn
-                        case 18:
-                            pImg = 5;
-                            break;
-                        case 11: // knight
-                        case 19:
-                            pImg = 3;
-                            break;
-                        case 12: // bishop
-                        case 20:
-                            pImg = 2;
-                            break;
-                        case 13: // rook
-                        case 21:
-                            pImg = 4;
-                            break;
-                        case 14: // queen
-                        case 22:
-                            pImg = 1;
-                            break;
-                        case 0:
-                            pImg = -1;
-                            break;
-                    }
-                    if (gameBoard.getPieceOnSquare(sq) > 16){
-                        pImg += 6;
-                    }
+                    int pImg = getPieceIndexFromId(sq, gameBoard); // img from pieceImageList
                     if(pImg != -1){
                         g.drawImage(pieceImageList[pImg], ((sq)%8)*64, (448-((int)(sq)/8)*64), this);
-                        
                     }
                 }
+                //g.drawImage(pieceImageList[])
             }
         };
         chessUI.add(chessBoard);
@@ -136,6 +106,8 @@ public class Game {
             @Override
             public void mousePressed(MouseEvent mse) {
                 System.out.println(getPieceUnderMouse(mse.getX(), mse.getY(), gameBoard));
+
+                chessBoard.repaint();
             }
 
             @Override
@@ -163,11 +135,61 @@ public class Game {
         
     }
     
-    public static int getPieceUnderMouse(int x, int y, Board bd){
-        int xPiece = x/64;
-        int yPiece = 7 - (y/64);
-        int temp = ((int)yPiece*8)+(xPiece);
-        int piece = bd.getPieceOnSquare(temp);
+    private static int getPieceUnderMouse(int x, int y, Board bd){
+        int xPiece = getXSquareFromMouseX(x);
+        int yPiece = getYSquareFromMouseY(y);
+        int piece = bd.getPieceOnSquare(getSquareFromCoords(xPiece, yPiece));
         return piece;
     }
+
+    private static int getSquareFromCoords(int x, int y){
+        return ((int)y*8)+(x);
+    }
+
+    private static int getXSquareFromMouseX(int mouseX){
+        return mouseX/64;
+    }
+
+    private static int getYSquareFromMouseY(int mouseY){
+        return (7 - (mouseY/64));
+    }
+
+
+    private static int getPieceIndexFromId(int sq, Board bd){
+        int pImg = -1;
+        switch(bd.getPieceOnSquare(sq)) {
+            case 9: // king
+            case 17:
+                pImg = 0;
+                break;
+            case 10: // pawn
+            case 18:
+                pImg = 5;
+                break;
+            case 11: // knight
+            case 19:
+                pImg = 3;
+                break;
+            case 12: // bishop
+            case 20:
+                pImg = 2;
+                break;
+            case 13: // rook
+            case 21:
+                pImg = 4;
+                break;
+            case 14: // queen
+            case 22:
+                pImg = 1;
+                break;
+            case 0:
+                pImg = -1;
+                break;
+        }
+        if (bd.getPieceOnSquare(sq) > 16){
+            pImg += 6;
+        }
+        return pImg;
+    }
+    
 }
