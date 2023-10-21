@@ -47,6 +47,10 @@ public class Game {
     static Color darkSquareColor = new Color(140,162,173); // theme from Lichess website
     static Color lightSquareColor = new Color(222,227,230);
 
+    static int heldPieceId = -1;
+    static int heldPieceX = -1;
+    static int heldPieceY = -1;
+
     public static void main(String[] args) throws IOException{
 
         Board gameBoard = new Board();
@@ -55,7 +59,7 @@ public class Game {
         BufferedImage imageReader = ImageIO.read(new File("assets/pieces.png"));
         Image pieceImageList[] = new Image[12];
         
-        int heldPieceId;
+
         
 
         int iter = 0;
@@ -71,7 +75,7 @@ public class Game {
         chessUI.setBounds(10, 10, 512, 512);
         //Board.makeBoard();
         gameBoard.setBoardFromFen(Board.startFEN);
-        JPanel chessBoard = new JPanel(){ //The JPanel is our representaiton of the board, and is drawn to the
+        JPanel chessBoard = new JPanel(){ //The JPanel is our representaiton of the board, and is drawn to the gameBoard
             @Override
             public void paint(Graphics g){
                 for(int y=0; y<8; y++){
@@ -85,12 +89,18 @@ public class Game {
                     }
                 }
                 for(int sq = 0; sq < 64; sq++){
-                    int pImg = getPieceIndexFromId(sq, gameBoard); // img from pieceImageList
+                    int id = gameBoard.getPieceOnSquare(sq);
+                    int pImg = getPieceImageIndexFromId(id); // img from pieceImageList
                     if(pImg != -1){
                         g.drawImage(pieceImageList[pImg], ((sq)%8)*64, (448-((int)(sq)/8)*64), this);
                     }
                 }
-                //g.drawImage(pieceImageList[])
+                if (heldPieceId != -1 || heldPieceX != -1 || heldPieceY != -1){
+                    System.out.println("held piece id: " + heldPieceId);
+                    System.out.println("held piece X: " + heldPieceX);
+                    System.out.println("held piece Y: " + heldPieceY);
+                    g.drawImage(pieceImageList[getPieceImageIndexFromId(heldPieceId)], heldPieceX, heldPieceY, this);
+                }
             }
         };
         chessUI.add(chessBoard);
@@ -106,12 +116,28 @@ public class Game {
             @Override
             public void mousePressed(MouseEvent mse) {
                 System.out.println(getPieceUnderMouse(mse.getX(), mse.getY(), gameBoard));
-
+                //setHeldLocation(mse.getX(), mse.getY());
+                heldPieceX = mse.getX();
+                heldPieceY = mse.getY();
+                heldPieceId = getPieceUnderMouse(mse.getX(), mse.getY(), gameBoard);
                 chessBoard.repaint();
             }
 
             @Override
             public void mouseReleased(MouseEvent mse) {
+                gameBoard.setPieceOnSquare(getSquareFromCoords(getXSquareFromMouseX(mse.getX()), getYSquareFromMouseY(mse.getY())), heldPieceId);
+                heldPieceX = -1;
+                heldPieceY = -1;
+                heldPieceId = -1;
+                chessBoard.repaint();
+                
+/*
+                System.out.println("we've released!!!");
+                System.out.println("heldPieceX after release: " + heldPieceX);
+                System.out.println("heldPieceY after release: " + heldPieceY);
+                System.out.println("heldPieceId after release: " + heldPieceId);
+                */
+                
             }
 
             @Override
@@ -122,6 +148,9 @@ public class Game {
         chessUI.addMouseMotionListener(new MouseMotionListener(){
             @Override
             public void mouseDragged(MouseEvent mse) {
+                heldPieceX = mse.getX();
+                heldPieceY = mse.getY();
+                chessBoard.repaint();
             }
 
             @Override
@@ -153,11 +182,19 @@ public class Game {
     private static int getYSquareFromMouseY(int mouseY){
         return (7 - (mouseY/64));
     }
+    private static int getpieceIdClicked(int mseX, int mseY, Board bd){
+        return getPieceUnderMouse(mseX, mseY, bd);
+    }
+    /*
+    private static void setHeldLocation(int mseXLoc, int mseYLoc){
+        heldPieceX = mseXLoc;
+        heldPieceY = mseYLoc;
+    }
+*/
 
-
-    private static int getPieceIndexFromId(int sq, Board bd){
+    private static int getPieceImageIndexFromId(int id){
         int pImg = -1;
-        switch(bd.getPieceOnSquare(sq)) {
+        switch(id) {
             case 9: // king
             case 17:
                 pImg = 0;
@@ -186,7 +223,7 @@ public class Game {
                 pImg = -1;
                 break;
         }
-        if (bd.getPieceOnSquare(sq) > 16){
+        if (id > 16){
             pImg += 6;
         }
         return pImg;
