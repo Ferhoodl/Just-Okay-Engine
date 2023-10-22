@@ -50,6 +50,7 @@ public class Game {
     static int heldPieceId = -1;
     static int heldPieceX = -1;
     static int heldPieceY = -1;
+    static int heldPieceOrigSq = -1;
 
     public static void main(String[] args) throws IOException{
 
@@ -59,9 +60,6 @@ public class Game {
         BufferedImage imageReader = ImageIO.read(new File("assets/pieces.png"));
         Image pieceImageList[] = new Image[12];
         
-
-        
-
         int iter = 0;
         for (int y=0; y<400; y+=200){
             for(int x=0; x<1200; x+=200){
@@ -73,7 +71,6 @@ public class Game {
         // create board here
         JFrame chessUI = new JFrame();
         chessUI.setBounds(10, 10, 512, 512);
-        //Board.makeBoard();
         gameBoard.setBoardFromFen(Board.startFEN);
         JPanel chessBoard = new JPanel(){ //The JPanel is our representaiton of the board, and is drawn to the gameBoard
             @Override
@@ -91,14 +88,11 @@ public class Game {
                 for(int sq = 0; sq < 64; sq++){
                     int id = gameBoard.getPieceOnSquare(sq);
                     int pImg = getPieceImageIndexFromId(id); // img from pieceImageList
-                    if(pImg != -1){
-                        g.drawImage(pieceImageList[pImg], ((sq)%8)*64, (448-((int)(sq)/8)*64), this);
+                    if(pImg != -1 && sq != heldPieceOrigSq){
+                        g.drawImage(pieceImageList[pImg], ((sq)%8)*64, (448-((int)(sq)/8)*64), this); // paint givne piece on board
                     }
                 }
                 if (heldPieceId != -1 || heldPieceX != -1 || heldPieceY != -1){
-                    System.out.println("held piece id: " + heldPieceId);
-                    System.out.println("held piece X: " + heldPieceX);
-                    System.out.println("held piece Y: " + heldPieceY);
                     g.drawImage(pieceImageList[getPieceImageIndexFromId(heldPieceId)], heldPieceX, heldPieceY, this);
                 }
             }
@@ -117,27 +111,22 @@ public class Game {
             public void mousePressed(MouseEvent mse) {
                 System.out.println(getPieceUnderMouse(mse.getX(), mse.getY(), gameBoard));
                 //setHeldLocation(mse.getX(), mse.getY());
-                heldPieceX = mse.getX();
-                heldPieceY = mse.getY();
+                heldPieceOrigSq = getSquareFromMouseCoords(mse.getX(), mse.getY());
+                System.out.println(heldPieceOrigSq);
+                heldPieceX = mse.getX()-32;
+                heldPieceY = mse.getY()-32;
                 heldPieceId = getPieceUnderMouse(mse.getX(), mse.getY(), gameBoard);
                 chessBoard.repaint();
             }
 
             @Override
             public void mouseReleased(MouseEvent mse) {
-                gameBoard.setPieceOnSquare(getSquareFromCoords(getXSquareFromMouseX(mse.getX()), getYSquareFromMouseY(mse.getY())), heldPieceId);
+                gameBoard.movePiece(heldPieceOrigSq, getSquareFromMouseCoords(mse.getX(), mse.getY()));
                 heldPieceX = -1;
                 heldPieceY = -1;
                 heldPieceId = -1;
-                chessBoard.repaint();
-                
-/*
-                System.out.println("we've released!!!");
-                System.out.println("heldPieceX after release: " + heldPieceX);
-                System.out.println("heldPieceY after release: " + heldPieceY);
-                System.out.println("heldPieceId after release: " + heldPieceId);
-                */
-                
+                heldPieceOrigSq = -1;
+                chessBoard.repaint();   
             }
 
             @Override
@@ -148,8 +137,8 @@ public class Game {
         chessUI.addMouseMotionListener(new MouseMotionListener(){
             @Override
             public void mouseDragged(MouseEvent mse) {
-                heldPieceX = mse.getX();
-                heldPieceY = mse.getY();
+                heldPieceX = mse.getX()-32;
+                heldPieceY = mse.getY()-32;
                 chessBoard.repaint();
             }
 
@@ -165,14 +154,23 @@ public class Game {
     }
     
     private static int getPieceUnderMouse(int x, int y, Board bd){
-        int xPiece = getXSquareFromMouseX(x);
-        int yPiece = getYSquareFromMouseY(y);
-        int piece = bd.getPieceOnSquare(getSquareFromCoords(xPiece, yPiece));
+        //int xPiece = getXSquareFromMouseX(x);
+        //int yPiece = getYSquareFromMouseY(y);
+        int piece = bd.getPieceOnSquare(getSquareFromMouseCoords(x, y));
         return piece;
     }
 
-    private static int getSquareFromCoords(int x, int y){
-        return ((int)y*8)+(x);
+
+    private static int getSquareFromBoardCoords(int x, int y){
+        int temp = ((int)y/8)+(int)(x);
+        return (((int)y*8)+((int)(x)));
+    }
+
+    private static int getSquareFromMouseCoords(int mseX, int mseY){
+        int xSquare = getXSquareFromMouseX(mseX);
+        int ySquare = getYSquareFromMouseY(mseY);
+        int temp = getSquareFromBoardCoords(xSquare, ySquare);
+        return temp;
     }
 
     private static int getXSquareFromMouseX(int mouseX){
