@@ -57,7 +57,7 @@ public class Game {
         Board gameBoard = new Board();
 
         //Draw pieces here
-        BufferedImage imageReader = ImageIO.read(new File("assets/pieces.png"));
+        BufferedImage imageReader = ImageIO.read(new File("assets/images/pieces.png"));
         Image pieceImageList[] = new Image[12];
         
         int iter = 0;
