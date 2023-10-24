@@ -2,6 +2,8 @@ package code;
 import java.util.*;
 public class Board {
 
+    static String colorToMove = "white";
+
     private static int[] squares;
     public static final String startFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
@@ -26,6 +28,7 @@ public class Board {
     public int[] getSquares(){
         return squares;
     }
+
 
     public void setBoardFromFen (String fen){
 

@@ -92,7 +92,13 @@ public class Game {
                         g.drawImage(pieceImageList[pImg], ((sq)%8)*64, (448-((int)(sq)/8)*64), this); // paint givne piece on board
                     }
                 }
-                if (heldPieceId != -1 || heldPieceX != -1 || heldPieceY != -1){
+                if ((heldPieceId != -1 || heldPieceX != -1 || heldPieceY != -1) && heldPieceId != 0){
+                    System.out.println(" SPECIAL heldPieceId: " + heldPieceId);
+                    System.out.println(" SPECIAL heldPieceX: " + heldPieceX);
+                    System.out.println(" SPECIAL heldPieceY: " + heldPieceY);
+
+                    System.out.println(heldPieceId);
+                    System.out.println(getPieceImageIndexFromId(heldPieceId));
                     g.drawImage(pieceImageList[getPieceImageIndexFromId(heldPieceId)], heldPieceX, heldPieceY, this);
                 }
             }
