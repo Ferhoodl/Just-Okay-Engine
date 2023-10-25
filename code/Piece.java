@@ -38,18 +38,18 @@ public class Piece{
     }
 
     public static boolean isColor(int pieceId, String color){
-        if (((pieceId-8 > 8) && color.equals("black")) || 
+        if (pieceId == 0){
+            return false;
+        }else if (((pieceId-8 > 8) && color.equals("black")) || 
             (!(pieceId-8 > 8) && color.equals("white"))){
             return true;  
-        }if (pieceId == 0){
-            return false;
         }else{
             return false;
         }
 
     }
     public static boolean isSlidingPiece(int pieceId){
-        boolean bool = true;
+        boolean bool = false;
         switch (pieceId){
             case 12:
             case 13:

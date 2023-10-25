@@ -7,4 +7,10 @@ class Move{
         startSquare = start;
         targetSquare = target;
     }
+    public int getStartSquare(){
+        return startSquare;
+    }
+    public int getTargetSquare(){
+        return targetSquare;
+    }
 }

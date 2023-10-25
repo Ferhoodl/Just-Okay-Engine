@@ -6,6 +6,7 @@ public class Board {
 
     private static int[] squares;
     public static final String startFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    public static final String testFEN = "8/8/8/8/8/8/8/R7";
 
     public Board(){
         squares = new int[64];
@@ -62,7 +63,6 @@ public class Board {
                     squares[rank * 8 + file] = pieceType | pieceColor;
                     file++;
                 }
-                
             }
         }
     }

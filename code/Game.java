@@ -47,6 +47,10 @@ public class Game {
     static Color darkSquareColor = new Color(140,162,173); // theme from Lichess website
     static Color lightSquareColor = new Color(222,227,230);
 
+    static Color darkSquareThreatenedColor = new Color(214, 49, 49);
+    static Color lightSquareThreatenedColor = new Color(214, 120, 120);
+
+
     static int heldPieceId = -1;
     static int heldPieceX = -1;
     static int heldPieceY = -1;
@@ -71,16 +75,25 @@ public class Game {
         // create board here
         JFrame chessUI = new JFrame();
         chessUI.setBounds(10, 10, 512, 512);
-        gameBoard.setBoardFromFen(Board.startFEN);
+        gameBoard.setBoardFromFen(Board.testFEN);
         JPanel chessBoard = new JPanel(){ //The JPanel is our representaiton of the board, and is drawn to the gameBoard
             @Override
             public void paint(Graphics g){
                 for(int y=0; y<8; y++){
                     for(int x=0; x<8; x++){ // iterate through each square on the board
                         if(((y+x)%2) == 1){ // decide if we're coloring a dark or light square
-                            g.setColor(darkSquareColor);
+                            if (heldPieceOrigSq != -1 && Movement.isLegal(gameBoard, heldPieceOrigSq, getSquareFromBoardCoords(x, 7-y))){
+                                g.setColor(darkSquareThreatenedColor);
+                            }else{
+                                g.setColor(darkSquareColor);
+                            }
+                            
                         }else{
-                            g.setColor(lightSquareColor);
+                            if (heldPieceOrigSq != -1 && Movement.isLegal(gameBoard, heldPieceOrigSq, getSquareFromBoardCoords(x, 7-y))){
+                                g.setColor(lightSquareThreatenedColor);
+                            }else{
+                                g.setColor(lightSquareColor);
+                            }
                         }
                         g.fillRect(x*64, y*64, 64, 64); // place colored square on board
                     }
@@ -93,12 +106,6 @@ public class Game {
                     }
                 }
                 if ((heldPieceId != -1 || heldPieceX != -1 || heldPieceY != -1) && heldPieceId != 0){
-                    System.out.println(" SPECIAL heldPieceId: " + heldPieceId);
-                    System.out.println(" SPECIAL heldPieceX: " + heldPieceX);
-                    System.out.println(" SPECIAL heldPieceY: " + heldPieceY);
-
-                    System.out.println(heldPieceId);
-                    System.out.println(getPieceImageIndexFromId(heldPieceId));
                     g.drawImage(pieceImageList[getPieceImageIndexFromId(heldPieceId)], heldPieceX, heldPieceY, this);
                 }
             }
@@ -115,10 +122,7 @@ public class Game {
 
             @Override
             public void mousePressed(MouseEvent mse) {
-                System.out.println(getPieceUnderMouse(mse.getX(), mse.getY(), gameBoard));
-                //setHeldLocation(mse.getX(), mse.getY());
                 heldPieceOrigSq = getSquareFromMouseCoords(mse.getX(), mse.getY());
-                System.out.println(heldPieceOrigSq);
                 heldPieceX = mse.getX()-32;
                 heldPieceY = mse.getY()-32;
                 heldPieceId = getPieceUnderMouse(mse.getX(), mse.getY(), gameBoard);
@@ -127,12 +131,14 @@ public class Game {
 
             @Override
             public void mouseReleased(MouseEvent mse) {
-                gameBoard.movePiece(heldPieceOrigSq, getSquareFromMouseCoords(mse.getX(), mse.getY()));
+                if (Movement.isLegal(gameBoard, heldPieceOrigSq, getSquareFromMouseCoords(mse.getX(), mse.getY()))){
+                    gameBoard.movePiece(heldPieceOrigSq, getSquareFromMouseCoords(mse.getX(), mse.getY())); 
+                }
                 heldPieceX = -1;
                 heldPieceY = -1;
                 heldPieceId = -1;
                 heldPieceOrigSq = -1;
-                chessBoard.repaint();   
+                chessBoard.repaint();
             }
 
             @Override
@@ -178,6 +184,7 @@ public class Game {
         int temp = getSquareFromBoardCoords(xSquare, ySquare);
         return temp;
     }
+
 
     private static int getXSquareFromMouseX(int mouseX){
         return mouseX/64;
