@@ -1,6 +1,6 @@
 ## Just Okay Engine (JOE) -- A Chess Engine Side Project
 
-I am developing this chess engine to learn how to code. It currently draws heavily on Sebastian Lague's [Coding Adventure: Chess](https://www.youtube.com/watch?v=U4ogK0MIzqk) videos, but is written in Java because that's what I'm least bad at.
+I am developing this chess engine to learn how to code. It currently draws heavily on Sebastian Lague's [Coding Adventure: Chess](https://www.youtube.com/watch?v=U4ogK0MIzqk) videos, but is written in Java.
 
 I plan on developing several versions to:
 
